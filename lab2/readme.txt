@@ -1,130 +1,55 @@
-                                 CS 61B  Lab 2
-                              January 30-31, 2014
+                                 CS 61B Lab 3
+                              February 6-7, 2014
 
-Goal:  This lab will give you experience with defining and using classes and
-fields, and with conditionals and recursive functions.
+Goal:  This lab will give you practice with linked lists.
 
-Copy the Lab 2 directory by starting from your home directory and typing:
-
-  cp -r ~cs61b/lab/lab2 .
-  cd lab2
+Copy the Lab 3 directory by starting from your home directory and typing:
+  cp -r ~cs61b/lab/lab3 .
+  cd lab3
 
 Getting Started
 ---------------
-Read the Fraction.java class into emacs and compile it using C-x C-e, filling
-in the command javac -g Fraction.java.  The program should compile without
-errors.  In a shell window, from your lab2 directory, run the program using
-"java Fraction".  The program should run, although it will print fractions in
-a non-reduced form, like 12/20.
+Please make sure you have a partner for this lab.
 
-Part I:  Constructors (1 point)
+The files in the directory lab3/ contain the classes SList and SListNode, which
+implement a singly-linked list.  Compile SList.java with "javac -g SList.java".
+Run the test code with
+
+    java SList
+
+The main() method of SList includes test code, which can be used to help debug
+the list code before SLists are used in other programs.
+
+Read SList.java to find out what methods are available to help you modify
+SLists.  Items in our SLists are indexed starting from 1, unlike Java arrays.
+
+Part I:  Using SLists (1 point)
 -------------------------------
-Look at the main method in the Fraction class, which declares and constructs
-four Fraction objects.  Four different constructors are used, each with
-different parameters.
+In the main() method, construct a list that looks like:
+    [ 6 9 12 ] 
+and print the resulting list.
 
-  Fraction f0 = new Fraction();
-  Fraction f1 = new Fraction(3);
-  Fraction f2 = new Fraction(12, 20);
-  Fraction f3 = new Fraction(f2);
+Add more lines to change this list to:
+    [ 3 6 9 12 15 ] 
+and print the resulting list.
 
-Look at the implementations of the constructors.  The two-parameter constructor
-is straightforward.  It assigns the parameters to the numerator and denominator
-fields.  The constructor with one int parameter uses some new syntax:
+Part II:  Adding to the End of a SList (3 points)
+--------------------------------------------------
+A method called insertEnd() exists, but it runs in linear time, because every
+time it is called, it walks down the list to find the end.  Without changing
+the meaning of this method or any other, modify the representation of a SList
+and whatever methods are necessary to make insertEnd() run in constant time.
+Your SList class will need to continually maintain a record of the last (tail)
+SListNode in an SList, and all SList's methods will have to ensure that this
+record stays current.
 
-  this(n, 1);
-
-The effect of this statement is to call the two-parameter constructor, passing
-n and 1 as parameters.  "this" is a keyword in Java, which normally refers to
-the object on which a method is invoked.  In a constructor, it can be used (as
-above) to invoke a constructor from within another constructor.
-
-We could have written the one-parameter constructor thusly:
-
-  public Fraction(int n) {
-    if (n < 0) {
-      System.out.println("Fatal error:  Negative numerator.");
-      System.exit(0);
-    }
-    numberOfFractions++;
-    numerator = n;
-    denominator = 1;
-  }
-
-Why call the two-parameter constructor instead?  The reason is one of good
-software engineering:  by having three of the constructors call the fourth, we
-have reduced duplicate code--namely, the error-checking code and fraction
-counting code in the first constructor.  By reusing code this way, the program
-is shorter, and more importantly, if we later find a bug in the constructor, we
-might only need to fix the first constructor to fix all of them.
-
-This principle applies to methods in general, not just constructors.  In your
-own programs, if you find yourself copying multiple lines of code for reuse, it
-is usually wise to put the common code into a new shared method.
-
-The no-parameter constructor does not use the good style just described.
-Modify it to call the two-parameter constructor.  Then, fill in the fourth
-constructor so that it uses the good style and correctly duplicates the input
-Fraction (it does neither now).  Your TA or lab assistant will ask to see your
-constructors when you get checked off.
-
-Part II:  Using Objects (1 point)
----------------------------------
-Further on in the main method, there are four lines commented out.  Remove the
-comment markers and fill in the two missing expressions so that sumOfTwo is the
-sum of f1 and f2, and sumOfThree is the sum of f0, f1, and f2.
-
-Part III:  Defining Classes (1 point)
--------------------------------------
-The changeNumerator and fracs methods don't work.  Fix them.  You may NOT
-change their signatures.  Each fix should require the addition of just one
-word.  These changes may or may not be in the methods themselves.
-
-Part IV:  Conditionals and Recursive Functions (1 point)
---------------------------------------------------------
-The main method prints the Fractions thusly:
-
-  System.out.println("The fraction f0 is " + f0.toString()); 
-  System.out.println("The fraction f1 is " + f1);   // toString is implicit
-  System.out.println("The fraction f2 is " + f2);
-  System.out.println("The fraction f3 is " + f3 + ", which should equal f2");
-
-How does Java know what to do when printing the fractions f1, f2, and f3?  In
-the case of f0, we have invoked the toString method; please read the toString()
-code.
-
-In the next three lines, we are asking Java to concatenate a Fraction to the
-end of a String.  A Fraction is not a String, so can't be concatenated
-directly, but Java cleverly looks for a method called toString to convert each
-Fraction to a string.  This is standard in Java:  any object can have a
-toString method, and if it does, that method will be automatically called when
-you concatenate the object to a String.  (Actually, _every_ object has a
-toString method, but the default toString isn't particularly enlightening.)
-
-As we noted earlier, the toString method prints a Fraction in non-reduced form.
-Examine the code in the toString method.  It is calling another method called
-gcd that computes the greatest common divisor (GCD) of two positive integers.
-If this method worked correctly, toString would print Fractions in reduced
-form; instead, gcd always returns 1.  Rewrite the body of gcd so that it is
-a recursive function that correctly computes the GCD.  Recompile and run your
-program.
-
-Here is pseudocode for a recursive GCD function.  a and b must be nonnegative.
-
-  function gcd(a, b)
-    if b = 0
-      return a
-    else
-      return gcd(b, a mod b)
-
 Check-off
 ---------
-1 point:  Show the TA or lab assistant your last two Fraction constructors.
-          Run your program to demonstrate that f2 and f3 are initially equal.
-1 point:  Demonstrate that your program correctly computes the two sums of
-          fractions.
-1 point:  Demonstrate that your program changes f3 to 7/20, and prints the
-          correct number of Fraction objects.  Tell the TA or lab assistant
-          what two words you had to add to fix these bugs.
-1 point:  Demonstrate your program that correctly computes GCDs and fractions
-          in reduced form.
+Show your TA or Lab Assistant your main() and insertEnd() methods and run the
+program.
+
+1 point:   Show your main() method, and show that it is printing the proper
+           output for Part I.
+3 points:  Show your insertEnd() method, and explain how you got it to work in
+           constant time.  Show that your program still prints the right
+           output.  Which other methods had to be modified?

@@ -191,4 +191,8 @@ public class DList {
     }
     return result + "]";
   }
+  
+  public static void main(Strings[] args){
+	  System.out.println("this is the test function of DList!");
+  }
 }

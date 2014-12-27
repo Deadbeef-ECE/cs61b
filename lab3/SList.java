@@ -11,6 +11,7 @@
 public class SList {
 
   private SListNode head;
+  private SListNode tail;
   private int size;
 
   /**
@@ -20,6 +21,7 @@ public class SList {
   public SList() {
     size = 0;
     head = null;
+    tail = null;
   }
 
   /**
@@ -48,6 +50,9 @@ public class SList {
   public void insertFront(Object obj) {
     head = new SListNode(obj, head);
     size++;
+    if(tail == null){
+    	tail = head;
+    }
   }
 
   /**
@@ -56,16 +61,24 @@ public class SList {
    **/
 
   public void insertEnd(Object obj) {
-    if (head == null) {
-      head = new SListNode(obj);
-    } else {
-      SListNode node = head;
-      while (node.next != null) {
-        node = node.next;
-      }
-      node.next = new SListNode(obj);
-    }
-    size++;
+//    if (head == null) {
+//      head = new SListNode(obj);
+//    } else {
+//      SListNode node = head;
+//      while (node.next != null) {
+//        node = node.next;
+//      }
+//      node.next = new SListNode(obj);
+//    }
+//    size++;
+	  if(tail == null){
+		  tail = new SListNode(obj);
+		  head = tail;
+	  }else{
+		  tail.next = new SListNode(obj);
+		  tail = tail.next;
+	  }
+	  size++;
   }
 
   /**
@@ -124,7 +137,14 @@ public class SList {
 
   public static void main (String[] args) {
     // Fill in your solution for Part I here.
-
+	SList slist = new SList();
+	slist.insertEnd(6);
+	slist.insertEnd(9);
+	slist.insertEnd(12);
+	slist.insertFront(3);
+	slist.insertEnd(15);
+	System.out.println("New slist:" + slist);
+	
     testEmpty();
     testAfterInsertFront();
     testAfterInsertEnd();
