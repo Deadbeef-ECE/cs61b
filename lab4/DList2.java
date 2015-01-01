@@ -76,17 +76,23 @@ public class DList2 {
   public void insertFront(int i) {
     // Your solution here.
 	  DListNode2 newNode = new DListNode2(i);
-	  if(size == 0){
-		  head.next = newNode;
-		  head.prev = head.next;
-		  head.next.prev = head;
-		  head.prev.next = head;
-	  }else{
-		  head.next.prev = newNode;
-		  newNode.next = head.next;
-		  newNode.prev = head;
-		  head.next = newNode;
-	  }
+//	  if(size == 0){
+//		  head.next = newNode;
+//		  head.prev = head.next;
+//		  newNode.prev = head;
+//		  head.prev.next = head;
+//	  }else{
+//		  head.next.prev = newNode;
+//		  newNode.next = head.next;
+//		  newNode.prev = head;
+//		  head.next = newNode;
+//	  }
+	  //Need NOT consider the size == 0 here;
+	  head.next.prev = newNode;
+	  newNode.next = head.next;
+	  newNode.prev = head;
+	  head.next = newNode;
+	  
 	  size++;
   }
 
@@ -95,11 +101,19 @@ public class DList2 {
    *  a DList2.  If the list is empty, do nothing.
    */
   public void removeFront() {
+//	  if(size == 0){
+//		  return;
+//	  }else if(size == 1){
+//		  head.next = head;
+//		  head.prev = head;
+//	  }else{
+//		  head.next = head.next.next;
+//		  head.next.prev = head;
+//	  }
+//	  size--;
+	  //Need NOT consider size == 1 here;
 	  if(size == 0){
 		  return;
-	  }else if(size == 1){
-		  head.next = head;
-		  head.prev = head;
 	  }else{
 		  head.next = head.next.next;
 		  head.next.prev = head;
