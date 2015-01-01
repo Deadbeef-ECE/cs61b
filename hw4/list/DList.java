@@ -191,8 +191,11 @@ public class DList {
     }
     return result + "]";
   }
-  
-  public static void main(Strings[] args){
+  public static void main (String[] args) {
+	   // testEmpty();
+	   // testAfterInsertFront();
+	   // testAfterInsertEnd();
 	  System.out.println("this is the test function of DList!");
-  }
+
+	  }
 }
