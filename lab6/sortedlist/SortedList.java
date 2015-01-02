@@ -51,16 +51,16 @@ public class SortedList {
     } else {
       ListNode temp = head;      
       while (temp.next != null) {
-	if (!temp.next.item.lessThan(x)) {
-	  newnode.next = temp.next;
-	  temp.next = newnode;
-	  temp = temp.next;
-	  break;
-	}
-	temp = temp.next;
+		if (!temp.next.item.lessThan(x)) {
+		  newnode.next = temp.next;
+		  temp.next = newnode;
+		  temp = temp.next;
+		  break;
+		}
+		temp = temp.next;
       }
       if (temp.next == null) {
-	temp.next = newnode;
+    	  temp.next = newnode;
       }
     }
     size++;
@@ -74,7 +74,7 @@ public class SortedList {
     ListNode temp = head;
     while (temp != null) {
       if (temp.item.getKey() == key) {
-	return temp.item;
+    	  return temp.item;
       }
       temp = temp.next;
     }
