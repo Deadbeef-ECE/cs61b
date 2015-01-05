@@ -8,6 +8,7 @@ import list.*;
  **/
 public class Set {
   /* Fill in the data fields here. */
+	List set;
 
   /**
    * Set ADT invariants:
@@ -24,6 +25,7 @@ public class Set {
    **/
   public Set() { 
     // Your solution here.
+	  set = new DList();
   }
 
   /**
@@ -33,7 +35,7 @@ public class Set {
    **/
   public int cardinality() {
     // Replace the following line with your solution.
-    return 0;
+	  return set.length();
   }
 
   /**
@@ -44,8 +46,29 @@ public class Set {
    *
    *  Performance:  runs in O(this.cardinality()) time.
    **/
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public void insert(Comparable c) {
     // Your solution here.
+	  if(cardinality() == 0){
+		  set.insertFront(c);
+	  }else{
+		  ListNode curNode;
+		  try{
+			  curNode = set.front();
+			  while(curNode != set.back() && c.compareTo((Comparable)curNode.item()) > 0){
+				  curNode = curNode.next();
+			  }
+			  if(c.compareTo((Comparable)curNode.item()) < 0){
+				  curNode.insertBefore(c);
+			  }
+			  if(c.compareTo((Comparable)curNode.item()) > 0){
+				  curNode.insertAfter(c);
+			  }
+		  }catch(InvalidNodeException ine){
+			  System.err.println("Error: Insert() failed!");
+		      ine.printStackTrace(System.err);
+		  }
+	  }
   }
 
   /**
@@ -63,8 +86,37 @@ public class Set {
    *  DO NOT MODIFY THE SET s.
    *  DO NOT ATTEMPT TO COPY ELEMENTS; just copy _references_ to them.
    **/
+  @SuppressWarnings({"rawtypes","unchecked"})
   public void union(Set s) {
     // Your solution here.
+	  if(s != null && s.cardinality() != 0){
+		  ListNode curNode = set.front();
+		  ListNode sNode = s.set.front();
+		  Comparable curItem, sItem;
+		  try{
+			  while(curNode.isValidNode() && sNode.isValidNode()){
+				  curItem = (Comparable)curNode.item();
+				  sItem = (Comparable)sNode.item();
+				  if(sItem.compareTo(curItem) == 0){
+					  sNode = sNode.next();
+				  }else if(sItem.compareTo(curItem) < 0){
+					  //s.elem < set.elem
+					  curNode.insertBefore(sItem);
+					  sNode = sNode.next();
+				  }else{//s.elem > set.elem
+					  if(curNode.next().isValidNode()){
+						  curNode = curNode.next();
+					  }else{
+						  curNode.insertAfter(sItem);
+						  sNode = sNode.next();
+					  }
+					 
+				  }
+			  }
+		  }catch(InvalidNodeException ine){
+			  System.err.println("Error: Union() failed!");
+		  }
+	  }
   }
 
   /**
@@ -80,8 +132,37 @@ public class Set {
    *  DO NOT CONSTRUCT ANY NEW NODES.
    *  DO NOT ATTEMPT TO COPY ELEMENTS.
    **/
+  @SuppressWarnings({"rawtypes","unchecked"})
   public void intersect(Set s) {
     // Your solution here.
+	  if(s != null && s.cardinality() != 0){
+		  ListNode curNode = set.front();
+		  ListNode sNode = s.set.front();
+		  Comparable curItem, sItem;
+		  ListNode tempNode;
+		  try{
+			  while(curNode.isValidNode() && sNode.isValidNode()){
+				  curItem = (Comparable)curNode.item();
+				  sItem = (Comparable)sNode.item();
+				  
+				  if(sItem.compareTo(curItem) == 0){
+					  curNode = curNode.next();
+					  sNode = sNode.next();
+				  }else if(sItem.compareTo(curItem) < 0){
+					  //s.elem < set.elem
+					  sNode = sNode.next();
+				  }else{
+					  //s.elem > set.elem
+					  tempNode = curNode.next();
+					  curNode.remove();
+					  curNode = tempNode;
+				  }
+			  }
+		  }catch(InvalidNodeException ine){
+			  System.err.println("Error: intersect() failed!");
+			  ine.printStackTrace(System.err);
+		  }
+	  }
   }
 
   /**
@@ -101,7 +182,19 @@ public class Set {
    **/
   public String toString() {
     // Replace the following line with your solution.
-    return "";
+	String result = "{ ";
+    ListNode current = set.front();
+    try{
+    	while(current.isValidNode()){
+    		result = result + current.item() + " ";
+    		current = current.next();
+    	}
+    }catch(InvalidNodeException ine){
+    	System.err.println("ERROR: toString() failed!");
+    	ine.printStackTrace(System.err);
+    }
+    
+    return result + "}";
   }
 
   public static void main(String[] argv) {
@@ -122,12 +215,46 @@ public class Set {
     s3.insert(new Integer(3));
     s3.insert(new Integer(8));
     System.out.println("Set s3 = " + s3);
+    
+//    System.out.println("s = " + s);
+//    System.out.println("s2 = " + s2);
+//    s.union(s2);
+//    System.out.println("After s.union(s2), s = " + s);
+//    
+//    System.out.println("s = " + s);
+//    System.out.println("s3 = " + s3);
+//    s.union(s3);
+//    System.out.println("After s.union(s3), s = " + s);
+//
+//    System.out.println("s2 = " + s2);
+//    System.out.println("s3 = " + s3);
+//    s2.union(s3);
+//    System.out.println("After s2.union(s3), s = " + s2);
 
-    s.union(s2);
-    System.out.println("After s.union(s2), s = " + s);
-
+    System.out.println("s = " + s);
+    System.out.println("s3 = " + s3);
     s.intersect(s3);
     System.out.println("After s.intersect(s3), s = " + s);
+    
+    System.out.println("s = " + s);
+    System.out.println("s2 = " + s2);
+    s.intersect(s2);
+    System.out.println("After s.intersect(s2), s = " + s);
+    
+    Set s4 = new Set();
+    s4.insert(new Integer(4));
+    s4.insert(new Integer(5));
+    s4.insert(new Integer(5));
+    System.out.println("Set s4 = " + s4);
+
+    Set s5 = new Set();
+    s5.insert(new Integer(5));
+    s5.insert(new Integer(3));
+    s5.insert(new Integer(8));
+    System.out.println("Set s5 = " + s5);
+    
+    s4.intersect(s5);
+    System.out.println("After s4.intersect(s5), s4 = " + s4);
 
     System.out.println("s.cardinality() = " + s.cardinality());
     // You may want to add more (ungraded) test code here.
