@@ -1,4 +1,5 @@
 /* SimpleBoard.java */
+import java.util.Arrays;
 
 /**
  *  Simple class that implements an 8x8 game board with three possible values
@@ -66,7 +67,11 @@ public class SimpleBoard {
     // Replace the following line with your solution.  Be sure to return false
     //   (rather than throwing a ClassCastException) if "board" is not
     //   a SimpleBoard.
-    return false;
+	if(!(board instanceof SimpleBoard)){
+		return false;
+	}
+	
+    return Arrays.deepEquals(this.grid, ((SimpleBoard)board).grid);
   }
 
   /**
@@ -76,7 +81,13 @@ public class SimpleBoard {
 
   public int hashCode() {
     // Replace the following line with your solution.
-    return 99;
+	  int hash = 0;
+	    for (int i = 0; i < DIMENSION; i++) {
+	      for (int j = 0; j < DIMENSION; j++) {
+	        hash = hash * 3 + grid[i][j];
+	      }
+	    }
+	    return hash;
   }
 
 }

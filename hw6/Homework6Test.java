@@ -60,6 +60,15 @@ public class Homework6Test {
     // that counts the number of collisions--or better yet, also prints
     // a histograph of the number of entries in each bucket.  Call this method
     // from here.
+
+
+    table.printHashTable();
+    
+//    System.out.println("\nFor " + table.numBuckets() + " buckets and " +
+//        numBoards + " boards, there were " +
+//        table.numCollisions() + " collisions.");
+    System.out.println("The number of collisions is about " +
+        table.countCollisions() + ".");
   }
 
 }
