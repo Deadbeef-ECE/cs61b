@@ -95,8 +95,7 @@ public abstract class TreeNode {
    *  to accommodate.  If the current node has fewer than c children,
    *  the new item is inserted as the last child.  If c < 1, act as if c is 1.
    */
-  public abstract void insertChild(Object item, int c) throws
-                                                       InvalidNodeException;
+  public abstract void insertChild(Object item, int c) throws InvalidNodeException;
 
   /**
    *  removeLeaf() removes the node at the current position from the tree if
