@@ -77,8 +77,16 @@ class SibTreeNode extends TreeNode {
    *  this node is the root.
    */
   public TreeNode parent() throws InvalidNodeException {
-    // REPLACE THE FOLLOWING LINE WITH YOUR SOLUTION TO PART I.
-    return null;
+	  if(isValidNode()){
+		  SibTreeNode parentNode = parent;
+		  if(this.myTree.root() == this){
+			  return new SibTreeNode();
+		  }else {
+			return parentNode;
+		  }
+	  }else{
+		  throw new InvalidNodeException();
+	  }
   }
 
   /**
@@ -133,6 +141,48 @@ class SibTreeNode extends TreeNode {
    */
   public void insertChild(Object item, int c) throws InvalidNodeException {
     // FILL IN YOUR SOLUTION TO PART II HERE.
+	  if(isValidNode()){
+		  SibTreeNode newNode = new SibTreeNode(this.myTree, item);
+		  newNode.parent = this;
+		  this.myTree.size++;
+		  
+//		  if(c < 1){
+//			  c = 0;
+//		  }else if ( c > this.children()){
+//			  c = this.children();
+//		  }else{
+//			  c -= 1;
+//		  }
+//		  SibTreeNode indexNode = (SibTreeNode)this.child(c);
+//		  
+//		  if(indexNode.isValidNode()){
+//			  if(c == this.children()){
+//				  indexNode.nextSibling = newNode;
+//			  }else{
+//				  newNode.nextSibling = indexNode.nextSibling;
+//				  indexNode.nextSibling = newNode;
+//			  }
+//		  }else{
+//			  newNode.nextSibling = this.firstChild;
+//			  this.firstChild = newNode;
+//		  }
+		  if(c <= 1){
+			  newNode.nextSibling = this.firstChild;
+			  this.firstChild = newNode;
+		  }else{
+			  SibTreeNode indexNode = (SibTreeNode) this.child(c-1);
+			  //c <= children number
+			  if(indexNode.isValidNode()){
+				  newNode.nextSibling = indexNode.nextSibling;
+				  indexNode.nextSibling = newNode;
+			  }else{// c > children number
+				  indexNode = (SibTreeNode) this.child(this.children());
+				  indexNode.nextSibling = newNode;
+			  }
+		  }
+	  }else{
+	      throw new InvalidNodeException();
+	  }
   }
 
   /**
@@ -143,6 +193,27 @@ class SibTreeNode extends TreeNode {
    */
   public void removeLeaf() throws InvalidNodeException {
     // FILL IN YOUR SOLUTION TO PART III HERE.
+	  if(isValidNode()){
+		  if(this.firstChild == null){
+			  if(this == myTree.root){
+				  myTree.root = null;
+			  }else{
+				  SibTreeNode child = parent.firstChild;
+				  if(this == child){
+					  parent.firstChild = this.nextSibling;
+				  }else{
+					  while(child.nextSibling != this){
+						  child = child.nextSibling;
+					  }
+					  child.nextSibling = this.nextSibling;
+				  }
+			  }
+			  this.valid = false;
+			  myTree.size--;
+		  }
+	  }else{
+		  throw new InvalidNodeException("cannot remove the leaf");
+	  }
   }
 
 }
